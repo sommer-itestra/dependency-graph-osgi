@@ -12,6 +12,8 @@ package com.amitinside.dependency.graph.osgi;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.swing.JFrame;
@@ -22,6 +24,9 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.Graphs;
 import org.graphstream.graph.implementations.MultiGraph;
+import org.graphstream.stream.file.FileSinkDOT;
+import org.graphstream.stream.file.FileSinkGML;
+import org.graphstream.stream.file.FileSinkGraphML;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 
@@ -90,6 +95,12 @@ public final class DependencyGraph {
     }
 
     public void display() {
+        try {
+            graph.write(new FileSinkDOT(), "dependencies.dot");
+            graph.write(new FileSinkGraphML(), "dependencies.gml");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         final Viewer viewer = graph.display();
         final ViewPanel panel = viewer.getDefaultView();
         viewer.enableAutoLayout();
